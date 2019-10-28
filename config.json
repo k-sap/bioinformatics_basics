@@ -1,0 +1,12 @@
+{
+    "config": {
+		"penalties": {
+            "gap": -2,
+            "same": 5,
+            "diff": -5
+        },
+        "max_seq_length": 100,
+        "max_number_paths": 5,
+        "output_dir": "./results/"
+    }
+}
