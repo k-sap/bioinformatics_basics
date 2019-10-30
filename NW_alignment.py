@@ -49,7 +49,7 @@ def algorithm(seq_a, seq_b):
         Fill matrix with scores
         k,l - upper left index
         """
-        up_left_val = mt[k][l] + (same if seq_a[k] == seq_b[l] else diff)
+        up_left_val = mt[k][l] + (same if seq_a[k+1] == seq_b[l+1] else diff)
         left_val = mt[k+1][l] + gap
         up_val = mt[k][l+1] + gap
         
@@ -76,16 +76,16 @@ def algorithm(seq_a, seq_b):
 #                 nonlocal seq_a
 #                 nonlocal seq_b
                 if mt_paths[k][l][n_possibility] == 0:
-                    return seq_align_a + seq_a[k-1], seq_align_b + seq_b[l-1], k-1, l-1
+                    return seq_align_a + seq_a[k], seq_align_b + seq_b[l], k-1, l-1
                 elif mt_paths[k][l][n_possibility] == 1:
-                    return seq_align_a + "-", seq_align_b + seq_b[l-1], k, l-1
+                    return seq_align_a + "-", seq_align_b + seq_b[l], k, l-1
                 elif mt_paths[k][l][n_possibility] == 2:
-                    return seq_align_a + seq_a[k-1], seq_align_b + "-", k-1, l
+                    return seq_align_a + seq_a[k], seq_align_b + "-", k-1, l
             
             #reccurence stop condition
             if k == 0 and l == 0:
                 #specific indexation stems from that the matrix has more rows and columns than the length of seq_a, seq_b
-                result_file += seq_align_a[len(seq_align_a)-2::-1] + "\n" + seq_align_b[len(seq_align_b)-2::-1] + "\n\n"
+                result_file += seq_align_a[len(seq_align_a)-1::-1] + "\n" + seq_align_b[len(seq_align_b)-1::-1] + "\n\n"
                 return
             #new paths
             elif len(mt_paths[k][l]) == 1:
@@ -107,7 +107,7 @@ def algorithm(seq_a, seq_b):
                 number_paths += 1
                 recurrent_path(alignment_state(0))
                 recurrent_path(alignment_state(1))
-        recurrent_path(("", "", m, n))
+        recurrent_path(("", "", m-1, n-1))
     
     #sequence change to get coherent indexation in matrix and in sequences
     seq_a = " " + seq_a
@@ -116,29 +116,28 @@ def algorithm(seq_a, seq_b):
     #variable initialization
     m = len(seq_a)
     n = len(seq_b)
-    mt = np.ndarray((m + 1,n + 1), np.int16)
-    mt_paths = [[[-1]]*(n+1) for m in range(m+1)]
+    mt = np.ndarray((m, n), np.int16)
+    mt_paths = [[[-1]]*(n) for m in range(m)]
     result_file = ""
     number_paths = 1
     
     #matrix obvious values
     mt[0][0] = 0
-    for i in range(1, m + 1):
+    for i in range(1, m):
         mt[i][0] = gap * i
         mt_paths[i][0] = [2]
-    for i in range(1, n + 1):
+    for i in range(1, n):
         mt[0][i] = gap * i
         mt_paths[0][i] = [1]
     
     #matrix non-obvious values
-    for i in range(m):
-        for j in range(n):
+    for i in range(m-1):
+        for j in range(n-1):
             matrix_fill(i, j)
     #score saved to file
-    result_file += str(mt[m][n]) + "\n\n"
+    result_file += str(mt[m-1][n-1]) + "\n\n"
     
     generate_paths()
-    
     return result_file
 
 
