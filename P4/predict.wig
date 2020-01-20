@@ -1,4 +1,5 @@
-fixedStep chrom=chr21 start=0 step=750 span=1500
+track type=wiggle_0 name="cokolwiek" description="enhancers prediction"  visibility=full autoScale=off vieLimits=0.0:1.0 color=50,150,255 yLineMark=11.76 yLineOnOff=on priority=10
+fixedStep start=1 chrom=chr21 span=1500
 0.5 
 0.5 
 0.5 
